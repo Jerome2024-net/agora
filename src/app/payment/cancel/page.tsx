@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { XCircle, ArrowLeft, Home } from 'lucide-react';
+import { SearchParamsProvider, useSearchParamsContext } from '@/components/SearchParamsProvider';
 
-export default function PaymentCancelPage() {
+function PaymentCancelContent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParamsContext();
   const eventId = searchParams.get('eventId');
 
   useEffect(() => {
@@ -65,5 +66,19 @@ export default function PaymentCancelPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function PaymentCancelPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600"></div>
+      </div>
+    }>
+      <SearchParamsProvider>
+        <PaymentCancelContent />
+      </SearchParamsProvider>
+    </Suspense>
   );
 }

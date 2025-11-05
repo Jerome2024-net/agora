@@ -1,13 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { User, Mail, Calendar, UserCircle, Camera, CreditCard, CheckCircle, XCircle, AlertCircle, ExternalLink, Loader2, Wallet } from 'lucide-react';
+import { SearchParamsProvider, useSearchParamsContext } from '@/components/SearchParamsProvider';
 
-export default function ProfilePage() {
+function ProfileContent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParamsContext();
   const { user, isAuthenticated, updateProfileImage, updateStripeAccount } = useAuth();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -677,5 +678,19 @@ export default function ProfilePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProfilePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600"></div>
+      </div>
+    }>
+      <SearchParamsProvider>
+        <ProfileContent />
+      </SearchParamsProvider>
+    </Suspense>
   );
 }

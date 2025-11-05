@@ -1,13 +1,14 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 import { getEvents } from '@/lib/data';
 import EventCard from '@/components/EventCard';
 import { useState, useEffect } from 'react';
 import { Filter, Calendar, MapPin, TrendingUp, Sparkles, Grid3x3, List, Target, Music, Utensils, Laptop, Trophy, Palette, BookOpen, Users, Ticket, Clock } from 'lucide-react';
+import { SearchParamsProvider, useSearchParamsContext } from '@/components/SearchParamsProvider';
 
-export default function Home() {
-  const searchParams = useSearchParams();
+function HomeContent() {
+  const searchParams = useSearchParamsContext();
   const searchQuery = searchParams.get('search') || '';
   const allEvents = getEvents();
   const [selectedCategory, setSelectedCategory] = useState('Tous');
@@ -427,5 +428,19 @@ export default function Home() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600"></div>
+      </div>
+    }>
+      <SearchParamsProvider>
+        <HomeContent />
+      </SearchParamsProvider>
+    </Suspense>
   );
 }

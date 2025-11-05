@@ -6,6 +6,8 @@ const nextConfig = {
   },
   basePath: process.env.NODE_ENV === 'production' ? '/agora' : '',
   assetPrefix: process.env.NODE_ENV === 'production' ? '/agora/' : '',
+  trailingSlash: true,
+  skipTrailingSlashRedirect: false,
 }
 
 module.exports = nextConfig
