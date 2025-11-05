@@ -30,6 +30,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Create .env.local for build
+        run: echo "NEXT_PUBLIC_BASE_URL=https://jerome2024-net.github.io/agora" > .env.local
+
       - name: Build with Next.js
         run: npm run build
         env:
